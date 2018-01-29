@@ -1,0 +1,45 @@
+apiVersion: v1
+kind: DeploymentConfig
+metadata:
+  name: grafana
+  labels:
+    app: grafana
+spec:
+  strategy:
+    type: Recreate
+  triggers:
+  - type: ConfigChange
+  replicas: 1
+  selector:
+    app: grafana
+    deploymentconfig: grafana
+  template:
+    metadata:
+      labels:
+        app: grafana
+        deploymentconfig: grafana
+      annotations:
+    spec:
+      volumes:
+        - name: grafana
+          emptyDir: {}
+      containers:
+      - name: grafana
+        image: kriev/grafana-openshift:4.6.3
+        imagePullPolicy: Always
+        env:
+        - name: GF_SERVER_ROOT_URL
+          value: "${SERVER_ROOT_URL}"
+        volumeMounts:
+          - name: grafana
+            mountPath: /var/lib/grafana
+        ports:
+        - name: http
+          containerPort: 3000
+        resources:
+          requests:
+            cpu: 250m
+            memory: 256Mi
+          limits:
+            cpu: 500m
+            memory: 256Mi
