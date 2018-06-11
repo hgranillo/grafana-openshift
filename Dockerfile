@@ -1,6 +1,6 @@
 FROM debian:jessie
 
-ENV GRAFANA_VERSION=5.0.0
+ENV GRAFANA_VERSION=5.1.3
 
 RUN useradd -u 103000 -M -r grafana
 
